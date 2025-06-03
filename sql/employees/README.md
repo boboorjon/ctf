@@ -1,208 +1,182 @@
-# CTF Challenge: Employee Portal SQL Injection
+application is a critical SQL injection vulnerability. Your mission is to identify and exploit this weakness to uncover sensitive data and hidden secrets within the system.
 
-## Challenge Description
-Bu zamonaviy Employee Management Portal tizimida yashirin SQL injection zaifligi mavjud. Sizning vazifangiz - tizimda yashirilgan flagni topish va adminlar uchun maxfiy ma'lumotlarga kirish.
+Difficulty Level: Easy
+Category: Web Exploitation - SQL Injection
 
-**Difficulty Level:** Intermediate  
-**Category:** Web Exploitation - SQL Injection
+Setup Instructions
+1. Requirements
+Docker
 
-## Setup Instructions
+Docker Compose
 
-### 1. Requirements
-- Docker
-- Docker Compose
+2. Build and Run
 
-### 2. Build and Run
-```bash
-# Repository clone qiling
+# Clone the repository
 git clone <repository-url>
 cd sql-injection-ctf
 
-# Docker container'larni ishga tushiring
+# Start the Docker containers
 docker-compose up -d
 
-# Ilovani browserda oching
+# Open the application in your browser
 http://localhost:8080
-```
+3. Challenge Environment
+Web Application: http://localhost:8080
 
-### 3. Challenge Environment
-- **Web Application:** `http://localhost:8080`
-- **Database:** MySQL 8.0 (port 3306)
-- **Technologies:** PHP 8.1, Apache, Bootstrap 5
+Database: MySQL 8.0 (port 3306)
 
-## Challenge Details
+Technologies: PHP 8.1, Apache, Bootstrap 5
 
-### Target
-Tizimda 2 ta flag yashirilgan:
-1. **Primary Flag:** `CTF{SQL_1nj3ct10n_M4st3r_2024}` - asosiy SQL injection orqali
-2. **Bonus Flag:** `FLAG{Hidden_Admin_Access}` - qo'shimcha kengaytirilgan hujumlar uchun
+Challenge Details
+Objective
+There are multiple hidden secrets within the system, including flags placed for discovery through SQL injection and advanced techniques.
 
-### Features
-- **Modern UI:** Bootstrap 5 bilan yaratilgan zamonaviy interfeys
-- **Interactive Tables:** DataTables.js bilan interaktiv jadvallar
-- **Multiple Tabs:** Dashboard, Employees, Projects, va Advanced Search
-- **Hidden Vulnerability:** Search funksiyasida SQL injection zaifligi
+Features
+Modern UI: Built with Bootstrap 5 for a clean interface
 
-### Vulnerability Location
-SQL injection zaifligi **Advanced Search** tabida yashirilgan. Oddiy ko'rinishda, lekin to'g'ri payload bilan exploit qilish mumkin.
+Interactive Tables: DataTables.js for user-friendly interactions
 
-### Database Schema
-```sql
-- users (admin accounts)
-- employees (employee information)  
-- projects (project data)
-- secrets (hidden flags)
-```
+Multiple Tabs: Includes Dashboard, Employees, Projects, and Advanced Search
 
-## Hints for Participants
+Hidden Vulnerability: The SQL injection vulnerability is concealed in the Advanced Search tab
 
-1. **Start Simple:** Oddiy search qilib ko'ring va qanday natijalar qaytishini kuzating
-2. **Error Messages:** Ba'zi xatoliklar database strukturasi haqida ma'lumot berishi mumkin
-3. **UNION Attacks:** Boshqa jadvallardan ma'lumot olish uchun UNION operatoridan foydalaning
-4. **Information Schema:** MySQL ning information_schema database'idan foydalanib jadval nomlarini aniqlang
-5. **Multiple Tables:** Bir nechta jadvallar mavjud, flaglar `secrets` jadvalida
-6. **Advanced Techniques:** Time-based yoki blind SQL injection texnikalarini ham sinab ko'ring
+Database Schema Overview
 
-## Solution Approach (Organizers Only)
+- users       (admin accounts)
+- employees   (employee data)
+- projects    (project-related information)
+- secrets     (contains hidden flags)
+Hints for Participants
+Start Simple: Try basic search inputs and observe how the system reacts
 
-### Basic Injection
-```sql
-' UNION SELECT 1,2,3,4,5,6,7,8 -- 
-```
+Error Messages: Analyze errors for insights into the database structure
 
-### Database Enumeration
-```sql
-' UNION SELECT 1,table_name,3,4,5,6,7,8 FROM information_schema.tables WHERE table_schema=database() -- 
-```
+UNION Attacks: Consider using SQL UNION techniques to extract more data
 
-### Column Discovery
-```sql
-' UNION SELECT 1,column_name,3,4,5,6,7,8 FROM information_schema.columns WHERE table_name='secrets' -- 
-```
+Information Schema: Leverage information_schema to enumerate database internals
 
-### Flag Extraction
-```sql
-' UNION SELECT 1,flag,description,4,5,6,7,8 FROM secrets -- 
-```
+Table Exploration: Multiple tables exist; investigate them thoroughly
 
-## Scoring
-- **Basic SQL Injection Detection:** 25 points
-- **Database Structure Discovery:** 25 points  
-- **Primary Flag Recovery:** 100 points
-- **Bonus Flag Discovery:** 50 points
-- **Advanced Techniques (Blind/Time-based):** 25 points
+Advanced Techniques: Try blind or time-based SQL injection approaches if necessary
 
-## Security Learning Objectives
+Scoring
+Basic SQL Injection Detection: 25 points
 
-### Participants will learn:
-1. **SQL Injection Fundamentals:** Qanday qilib zaif parametrlarni aniqlash
-2. **UNION-based Attacks:** Boshqa jadvallardan ma'lumot olish usullari
-3. **Database Enumeration:** Information schema orqali database strukturasini o'rganish
-4. **Payload Construction:** Turli xil SQL injection payload'larini yaratish
-5. **Modern Web Security:** Zamonaviy web ilovalarida xavfsizlik zaifliklari
+Database Structure Enumeration: 25 points
 
-### Vulnerability Analysis
-Bu challenge'da quyidagi xavfsizlik muammolari mavjud:
+Primary Flag Retrieval: 100 points
 
-**Primary Vulnerability:**
-```php
-// Vulnerable code in index.php line 24-30
-$sql = "SELECT e.*, p.project_name, p.budget 
-        FROM employees e 
-        LEFT JOIN projects p ON e.department = 'IT' AND p.status = 'active'
-        WHERE e.first_name LIKE '%$search_query%' 
-           OR e.last_name LIKE '%$search_query%' 
-           OR e.department LIKE '%$search_query%'
-        ORDER BY e.id";
-```
+Bonus Discovery: 50 points
 
-**Why it's vulnerable:**
-- To'g'ridan-to'g'ri string concatenation
-- Hech qanday input validation yo'q
-- Prepared statements ishlatilmagan
+Advanced Exploitation (Blind/Time-based): 25 points
 
-**Real-world Impact:**
-- Ma'lumotlar bazasidagi barcha ma'lumotlarga ruxsatsiz kirish
-- Maxfiy ma'lumotlarni o'g'irlash
-- Database'ni o'zgartirish yoki yo'q qilish imkoniyati
+Learning Objectives
+By completing this challenge, participants will learn:
+SQL Injection Basics: How to identify and exploit injectable parameters
 
-## Deployment Notes
+UNION-based Attacks: Extracting data from other tables
 
-### For Event Organizers:
+Database Enumeration: Using information_schema to understand the DB structure
 
-1. **Network Isolation:** Har bir team uchun alohida container instance yarating
-2. **Monitoring:** Challenge progress'ini kuzatish uchun loglarni monitoring qiling
-3. **Reset Capability:** Database'ni tez reset qilish uchun script tayyorlang
+Payload Crafting: Constructing various SQL injection payloads
 
-### Reset Database:
-```bash
+Web App Security Awareness: Understanding vulnerabilities in modern web applications
+
+Vulnerability Overview
+The application includes insecure code that concatenates user input directly into SQL queries without proper validation or prepared statements, leading to a severe SQL injection vulnerability.
+
+Why It’s Vulnerable:
+
+Direct input concatenation
+
+No sanitization or escaping
+
+Lack of prepared statements
+
+Potential Impact:
+
+Unauthorized access to sensitive data
+
+Disclosure of admin information and internal secrets
+
+Potential for full database compromise
+
+Deployment Notes
+For Event Organizers:
+Isolated Containers: Run a separate instance per team for isolation
+
+Monitoring: Enable logs to track progress or detect issues
+
+Reset Scripts: Provide an easy way to reset the environment between sessions
+
+Reset Environment:
+
 docker-compose down
 docker-compose up -d
-```
+Change Default Port:
 
-### Custom Configuration:
-```bash
 export WEBAPP_PORT=8081
 docker-compose up -d
+Educational Resources
+Recommended Reading:
+OWASP SQL Injection Prevention Cheat Sheet
 
-```
+PortSwigger Web Security Academy - SQL Injection
 
-## Educational Resources
+SANS SQL Injection Fundamentals
 
-### Recommended Reading:
-1. OWASP SQL Injection Prevention Cheat Sheet
-2. PortSwigger Web Security Academy - SQL Injection
-3. SANS SQL Injection Fundamentals
+Practice Platforms:
+SQLi-Labs
 
-### Additional Practice:
-- SQLi-labs
-- DVWA (Damn Vulnerable Web Application)  
-- bWAPP (Buggy Web Application)
+DVWA (Damn Vulnerable Web Application)
 
-## Technical Implementation Details
+bWAPP (Buggy Web Application)
 
-### Security Features (Intentionally Weak):
-- **Error Handling:** Generic error messages (lekin ba'zan database errors ko'rinadi)
-- **Input Validation:** Minimal validation
-- **Database Permissions:** Web user'ga read-only access (realistic scenario)
+Technical Details
+Security Posture (Intentionally Weak for Educational Purposes):
+Error Handling: Some database errors may be visible to users
 
-### Challenge Complexity:
-- **Beginner Level:** Basic UNION injection
-- **Intermediate Level:** Database enumeration
-- **Advanced Level:** Blind/Time-based techniques
+Input Validation: Minimal, mostly absent
 
-### Database Design:
-Database maxsus tarzda dizayn qilingan:
-- Employee ma'lumotlari realistic
-- Projects bilan complex JOIN'lar
-- Hidden secrets table
-- Multiple flag locations
+Permissions: The web application user has limited access (read-only for realism)
 
-## Troubleshooting
+Challenge Complexity Levels:
+Beginner: Basic detection and UNION injections
 
-### Common Issues:
-1. **Port Conflicts:** 8080 port busy bo'lsa, docker-compose.yml'da port'ni o'zgartiring
-2. **Database Connection:** Container'lar to'liq ishga tushguncha bir necha sekund kuting
-3. **Permission Issues:** Docker fayllariga write permission bor ekanligini tekshiring
+Intermediate: Enumeration of tables and columns
 
-### Debug Commands:
-```bash
-# Container logs ko'rish
+Advanced: Blind/time-based and deeper exploitation
+
+Database Design Notes:
+Realistic employee data
+
+Complex joins with projects
+
+Hidden secrets table with embedded challenges
+
+Multiple discovery paths
+
+Troubleshooting
+Common Issues:
+Port Conflicts: If port 8080 is in use, change it in docker-compose.yml
+
+Container Readiness: Wait a few seconds after up -d for containers to fully initialize
+
+Permission Errors: Ensure Docker has write permissions to project files
+
+Helpful Debugging Commands:
+
+# View logs
 docker-compose logs web
 docker-compose logs db
 
-# Database'ga to'g'ridan-to'g'ri ulanish
+# Connect directly to the MySQL database
 docker exec -it <container_name> mysql -u webapp -p employee_portal
 
-# Web container ichiga kirish
+# Access the web container shell
 docker exec -it <container_name> bash
-```
-
-## Author Information
-**Created by:** Boboor 
-**Contact:** t.me/realbobur
-**Version:** 1.0  
-**Last Updated:** June 2025
-
----
-
+Author
+Created by: Boboor
+Contact: t.me/realbobur
+Version: 1.0
+Last Updated: June 2025
