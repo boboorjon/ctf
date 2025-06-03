@@ -1,4 +1,6 @@
-application is a critical SQL injection vulnerability. Your mission is to identify and exploit this weakness to uncover sensitive data and hidden secrets within the system.
+CTF Challenge: Employee Portal SQL Injection
+Challenge Description
+Welcome to a modern Employee Management Portal. Hidden within the application is a critical SQL injection vulnerability. Your mission is to identify and exploit this weakness to uncover sensitive data and hidden secrets within the system.
 
 Difficulty Level: Easy
 Category: Web Exploitation - SQL Injection
@@ -13,7 +15,6 @@ Docker Compose
 
 # Clone the repository
 git clone <repository-url>
-cd sql-injection-ctf
 
 # Start the Docker containers
 docker-compose up -d
