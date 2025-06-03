@@ -199,8 +199,8 @@ docker exec -it <container_name> bash
 ```
 
 ## Author Information
-**Created by:** Cybersecurity Team  
-**Contact:** ctf-admin@company.com  
+**Created by:** Boboor 
+**Contact:** t.me/realbobur
 **Version:** 1.0  
 **Last Updated:** June 2025
 
