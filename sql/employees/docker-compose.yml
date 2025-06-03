@@ -1,0 +1,29 @@
+  GNU nano 4.8                                                                                                         docker-compose.yml                                                                                                                   
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "1338:80"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=employee_portal
+      - DB_USER=webapp
+      - DB_PASS=webapp123
+    volumes:
+      - ./src:/var/www/html
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass123
+      MYSQL_DATABASE: employee_portal
+      MYSQL_USER: webapp
+      MYSQL_PASSWORD: webapp123
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
