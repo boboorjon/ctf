@@ -1,5 +1,3 @@
-GNU nano 4.8                                                                                                             Dockerfile                                                                                                                       
-
 FROM php:8.1-apache
 
 RUN a2enmod rewrite headers
