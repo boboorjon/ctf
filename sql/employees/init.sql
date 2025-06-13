@@ -62,7 +62,7 @@ INSERT INTO projects (project_name, description, start_date, end_date, budget, s
 ('Security Audit', 'Complete security assessment', '2024-04-01', '2024-05-30', 50000.00, 'completed'),
 ('AI Implementation', 'Integrate AI tools into workflow', '2024-05-01', '2024-11-30', 200000.00, 'active');
 
-INSERT INTO eshmat (flag, description) VALUES
+INSERT INTO secrets (flag, description) VALUES
 ('Flag{99e8e9b6f8eab1b731002df1bb568a9c}', 'Congratulations! You found the hidden flag through SQL injection'),
 ('3asyP3asyL3monSqu1zzy', 'it is not flag just ez:)');
 
