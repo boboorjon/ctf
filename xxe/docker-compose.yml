@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  xxe-lab:
+    build: .
+    container_name: xxe
+    ports:
+      - "4001:80"
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    restart: unless-stopped
+    networks:
+      - xxe-network
+
+networks:
+  xxe-network:
+    driver: bridge
